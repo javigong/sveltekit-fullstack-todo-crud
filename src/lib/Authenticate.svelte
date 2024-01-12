@@ -137,7 +137,7 @@
 
   .above {
     top: 0;
-    left: 24px;
+    left: 6px;
     background: navy;
     border: 1ps solid blue;
     font-size: 0.7rem;
