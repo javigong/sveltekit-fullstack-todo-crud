@@ -18,30 +18,49 @@
     todoList = newTodoList
   }
 
-  function removeTodo(index: number) {}
+  function removeTodo(index: number) {
+    let newTodoList = todoList.filter((val, i) => i !== index)
+    todoList = newTodoList
+  }
 </script>
 
 <div class="mainContainer">
   <div class="headerContainer">
     <h1>Todo List</h1>
-    <button>
-      <i class="fa-regular fa-floppy-disk"></i>
-      <p>Save</p>
-    </button>
+    <div class="headerBtns">
+      <button>
+        <i class="fa-regular fa-floppy-disk"></i>
+        <p>Save</p>
+      </button>
+      <button>
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <p>Logout</p>
+      </button>
+    </div>
   </div>
 
   <main>
+    {#if todoList.length === 0}
+      <p>You have nothing to do!</p>
+    {/if}
     {#each todoList as todo, index}
       <div class="todo">
         <p>
           {index + 1}. {todo}
         </p>
         <div class="actions">
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
           <i
             on:click={() => editTodo(index)}
+            on:keydown={() => {}}
             class="fa-regular fa-pen-to-square"
-          ></i>
-          <i class="fa-solid fa-trash-can"></i>
+          />
+          <!-- svelte-ignore a11y-no-static-element-interactions -->
+          <i
+            on:click={() => removeTodo(index)}
+            on:keydown={() => {}}
+            class="fa-regular fa-trash-can"
+          />
         </div>
       </div>
     {/each}
@@ -69,6 +88,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .headerBtns {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
 
   .headerContainer button {
