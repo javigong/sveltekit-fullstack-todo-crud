@@ -68,7 +68,7 @@
   
   <main>
     {#if todoList.length === 0}
-      <p>You have nothing to do!</p>
+      <p>Well Done! Your to-do list is empty. Time to recharge.</p>
     {/if}
     {#each todoList as todo, index}
       <TodoItem todo={todo} index={index} removeTodo={removeTodo} editTodo={editTodo} />
