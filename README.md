@@ -1,6 +1,6 @@
 # SvelteKit To-Do App
 
-This is a demonstration of a To-Do App built with SvelteKit, incorporating Svelte Store for state management, Firebase Auth for user authentication using email and password, Cloud Firestore for storing individual to-do lists for each user, and Vercel for deploying the web application.
+This is a demonstration of a To-Do App built with SvelteKit, incorporating Svelte Store for state management, Firebase Auth for user authentication using email and password, Cloud Firestore for storing individual to-do lists for each user, Vercel for deploying the web application, and protected routes for enhanced security.
 
 ![captures_chrome-capture-2024-0-16](https://github.com/javigong/sveltekit-fullstack-todo-crud/assets/42308135/6e7fb523-8136-4e08-bf84-a38bc75b5bf6)
 
