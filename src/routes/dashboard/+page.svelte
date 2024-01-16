@@ -1,7 +1,20 @@
-<script lang="ts">
-  let todoList = ['Do the groceries']
+<script>
+// @ts-nocheck
+
+  import { db } from '$lib/firebase/firebase'
+  import { doc, setDoc } from 'firebase/firestore'
+  import { authHandlers, authStore } from '../../store/store'
+
+  /**
+   * @type {any[]}
+   */
+  let todoList = []
   let currTodo = ''
   let error = false
+
+  authStore.subscribe((curr) => {
+    todoList = curr.data.todos
+  })
 
   function addTodo() {
     if (!currTodo) {
@@ -12,15 +25,37 @@
     }
   }
 
-  function editTodo(index: number) {
+  /**
+   * @param {number} index
+   */
+  function editTodo(index) {
     let newTodoList = todoList.filter((val, i) => i !== index)
     currTodo = todoList[index]
     todoList = newTodoList
   }
 
-  function removeTodo(index: number) {
+  /**
+   * @param {number} index
+   */
+  function removeTodo(index) {
     let newTodoList = todoList.filter((val, i) => i !== index)
     todoList = newTodoList
+  }
+
+  async function saveTodos() {
+    try {
+      // @ts-ignore
+      const userRef = doc(db, 'users', $authStore.user.uid)
+      await setDoc(
+        userRef,
+        {
+          todos: todoList,
+        },
+        { merge: true }
+      )
+    } catch (error) {
+      console.log('There was an error saving your information')
+    }
   }
 </script>
 
@@ -28,17 +63,19 @@
   <div class="headerContainer">
     <h1>Todo List</h1>
     <div class="headerBtns">
-      <button>
+      <button on:click={saveTodos}>
         <i class="fa-regular fa-floppy-disk"></i>
         <p>Save</p>
       </button>
       <button>
         <i class="fa-solid fa-right-from-bracket"></i>
-        <p>Logout</p>
+        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+        <p on:click={authHandlers.logout} on:keydown={() => {}}>Logout</p>
       </button>
     </div>
   </div>
-
+  {#if !authStore.loading}
+  
   <main>
     {#if todoList.length === 0}
       <p>You have nothing to do!</p>
@@ -65,6 +102,7 @@
       </div>
     {/each}
   </main>
+  {/if}
 
   <div class={'enterTodo ' + (error ? 'errorBorder' : '')}>
     <input bind:value={currTodo} type="text" placeholder="Enter todo" />
