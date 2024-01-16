@@ -3,20 +3,29 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  type User,
 } from 'firebase/auth'
-import { writable } from 'svelte/store'
+import { writable, type Writable } from 'svelte/store'
 
-export const authStore = writable({
-  user: {},
+type AuthStore = Writable<{
+  user: User | null;
+  loading: boolean;
+  data: {
+      todos: string[];
+  };
+}>
+
+export const authStore: AuthStore= writable({
+  user: null,
   loading: true,
-  data: { todos: [] },
+  data: { todos: [''] },
 })
 
 export const authHandlers = {
-  signup: async (/** @type {string} */ email, /** @type {string} */ pass) => {
+  signup: async (email: string, pass: string) => {
     await createUserWithEmailAndPassword(auth, email, pass)
   },
-  login: async (/** @type {string} */ email, /** @type {string} */ pass) => {
+  login: async (email: string, pass: string) => {
     await signInWithEmailAndPassword(auth, email, pass)
   },
   logout: async () => {
