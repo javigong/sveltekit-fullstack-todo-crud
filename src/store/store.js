@@ -7,9 +7,9 @@ import {
 import { writable } from 'svelte/store'
 
 export const authStore = writable({
-  user: null,
+  user: {},
   loading: true,
-  data: {},
+  data: { todos: [] },
 })
 
 export const authHandlers = {
