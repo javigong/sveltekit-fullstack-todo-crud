@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
   import { auth, db } from '$lib/firebase/firebase'
   import { doc, getDoc, setDoc } from 'firebase/firestore'
   import { onMount } from 'svelte'
   import { authStore } from '../store/store'
+    import type { DocumentData } from 'firebase/firestore'
 
   const nonAuthRoutes = ['/', 'aboutus']
+  
   onMount(() => {
     console.log('Mounting')
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -24,10 +26,7 @@
         return
       }
 
-      /**
-       * @type {import("@firebase/firestore").DocumentData}
-       */
-      let dataToSetToStore
+      let dataToSetToStore: DocumentData
       const docRef = user ? doc(db, 'users', user.uid) : null
       const docSnap = docRef ? await getDoc(docRef) : null
 
@@ -48,10 +47,8 @@
       if (user) {
         authStore.update((curr) => ({
           ...curr,
-          // @ts-ignore
           user,
-          // @ts-ignore
-          data: dataToSetToStore,
+          data: dataToSetToStore as any,
           loading: false,
         }))
       }

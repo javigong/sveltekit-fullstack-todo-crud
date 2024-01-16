@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { authHandlers } from '../store/store'
 
   let email = ''

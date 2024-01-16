@@ -1,9 +1,8 @@
-<script>
-  // @ts-nocheck
-  export let todo
-  export let index
-  export let removeTodo
-  export let editTodo
+<script lang="ts">
+  export let todo: string
+  export let index: number
+  export let removeTodo: (index: number) => void
+  export let editTodo: (index: number) => void
 </script>
 
 <div class="todo">
@@ -34,7 +33,7 @@
     align-items: center;
     justify-content: space-between;
   }
-  
+
   .actions {
     display: flex;
     align-items: center;

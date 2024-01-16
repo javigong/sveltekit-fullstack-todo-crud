@@ -1,12 +1,10 @@
-<script>
-// @ts-nocheck
-
+<script lang='ts'>
   import { db } from '$lib/firebase/firebase'
   import { doc, setDoc } from 'firebase/firestore'
   import { authHandlers, authStore } from '../../store/store'
   import TodoItem from '$lib/TodoItem.svelte'
 
-  let todoList = []
+  let todoList= ['']
   let currTodo = ''
   let error = false
 
@@ -23,19 +21,13 @@
     }
   }
 
-  /**
-   * @param {number} index
-   */
-  function editTodo(index) {
+  function editTodo(index: number) {
     let newTodoList = todoList.filter((val, i) => i !== index)
     currTodo = todoList[index]
     todoList = newTodoList
   }
 
-  /**
-   * @param {number} index
-   */
-  function removeTodo(index) {
+  function removeTodo(index: number) {
     let newTodoList = todoList.filter((val, i) => i !== index)
     todoList = newTodoList
   }
@@ -72,7 +64,7 @@
       </button>
     </div>
   </div>
-  {#if !authStore.loading}
+  {#if !$authStore.loading}
   
   <main>
     {#if todoList.length === 0}
@@ -140,10 +132,6 @@
     gap: 8px;
     flex: 1;
   }
-
-  
-
-
 
   .enterTodo {
     display: flex;
