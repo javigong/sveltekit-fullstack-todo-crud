@@ -20,6 +20,10 @@
         return
       }
 
+      if (!user) {
+        return
+      }
+
       /**
        * @type {import("@firebase/firestore").DocumentData}
        */
@@ -28,7 +32,7 @@
       const docSnap = docRef ? await getDoc(docRef) : null
 
       if (user && !docSnap?.exists()) {
-        const userRef = doc(db, 'user', user.uid)
+        const userRef = doc(db, 'users', user.uid)
         dataToSetToStore = {
           email: user.email,
           todos: [],
@@ -46,6 +50,7 @@
           ...curr,
           // @ts-ignore
           user,
+          // @ts-ignore
           data: dataToSetToStore,
           loading: false,
         }))

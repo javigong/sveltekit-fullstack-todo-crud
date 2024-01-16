@@ -1,14 +1,33 @@
 <script>
+  import { authHandlers } from '../store/store'
+
   let email = ''
   let password = ''
   let confirmPass = ''
   let error = false
   let register = false
+  let authenticating = false
 
-  function handleAuthenticate() {
+  async function handleAuthenticate() {
+    if (authenticating) {
+      return
+    }
     if (!email || !password || (register && !confirmPass)) {
       error = true
       return
+    }
+    authenticating = true
+
+    try {
+      if (!register) {
+        await authHandlers.login(email, password)
+      } else {
+        await authHandlers.signup(email, password)
+      }
+    } catch (error) {
+      console.log('There was an auth error', error)
+      error = true
+      authenticating = false
     }
   }
 
@@ -41,7 +60,13 @@
         />
       </label>
     {/if}
-    <button type="button">Submit</button>
+    <button on:click={handleAuthenticate} type="button" class="submitBtn">
+      {#if authenticating}
+        <i class="fa-solid fa-spinner loadingSpinner"></i>
+      {:else}
+        Submit
+      {/if}
+    </button>
   </form>
   <div class="options">
     <p>Or</p>
@@ -53,7 +78,7 @@
     {:else}
       <div>
         <p>Don't have and account?</p>
-        <button on:click={handleRegister}>Register</button>
+        <button on:click={handleRegister}> Register</button>
       </div>
     {/if}
   </div>
@@ -118,6 +143,8 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
+    display: grid;
+    place-items: center;
   }
 
   form button:hover {
@@ -153,6 +180,7 @@
   .error {
     color: coral;
     font-size: 0.9rem;
+    text-align: center;
   }
 
   .options {
@@ -203,5 +231,18 @@
     border: none;
     background-color: transparent;
     font-size: 1rem;
+  }
+
+  .loadingSpinner {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>
